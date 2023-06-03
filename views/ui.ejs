@@ -1,0 +1,143 @@
+<html>
+  <link rel="stylesheet" href="style.css" />
+  <body>
+    <form>
+      
+      <input id= "autocomplete_search",name="texte" ,type="text" , placeholder="Type a text" />
+      <button>Treat it</button>
+    
+    </form>
+    <script>
+      //  const country = document.getElementById("country").textContent;
+      function getFlagEmoji(countryCode) {
+        const codePoints = countryCode
+          .toUpperCase()
+          .split("")
+          .map((char) => 127397 + char.charCodeAt());
+        return String.fromCodePoint(...codePoints);
+      }
+      //country.innerText = country.textContent + getFlagEmoji(country);
+      // console.log(country);
+      const form = document.querySelector("form");
+      const div = document.getElementById("result");
+      const list = document.getElementById("list");
+      var link;
+      var element;
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        /*
+        await fetch("/", {
+          method: "POST",
+          body: JSON.stringify({ text }),
+          headers: { "Content-Type": "application/json" },
+        })
+          .then(async (data) => {
+            data = await data.json();
+            console.log(data.response);
+            alert("data ==>" ,data.response)
+            for (var i = 0; i < data.response.length; i++) {
+            element = document.createElement("li");
+              link = document.createElement("a");
+              link.innerText = data.response[i];
+            element.appendChild(link);
+            list.appendChild(element);
+            }
+          data.data.sort((a, b) => {
+              return b.row.nbr_occ - a.row.nbr_occ;
+            });
+            for (var i = 0; i < data.data.length; i++) {
+              element = document.createElement("li");
+              link = document.createElement("a");
+              link.innerText = data.data[i].fName;
+              link.href =
+                "file:///Users/pc/Desktop/node%20JS/AI%20TP1%20copie/uploaded_files/" +
+                data.data[i].fName;
+              console.log(link.href);
+              element.appendChild(link);
+              list.appendChild(element);
+
+              console.log("- = >> ", data.data[i].row);
+            }
+
+            //  location.assign('/Page');
+          })
+          .catch((err) => console.log("error =  ", err));*/
+        fetch(
+          "http://num.univ-biskra.dz/psp/pspapi/department?faculty=3&key=appmob",
+          {
+            headers: {
+              Accept: "application/json",
+            },
+          }
+        )
+          .then((response) => response.text())
+          .then((text) => console.log(text));
+      });
+
+      const load_data = async (query = "") => {
+        await fetch("/search", {
+          method: "POST",
+          body: JSON.stringify({ query }),
+          headers: { "Content-Type": "application/json" },
+        })
+          .then((response) => {
+            return response.json();
+          })
+          .then((responseData) => {
+            var html = '<ul class="list-group">';
+
+            if (responseData.response.length > 0 && query != "") {
+              for (
+                var count = 0;
+                count < responseData.response.length;
+                count++
+              ) {
+                //  console.log(responseData.response[count] + "query =>",query);
+                var regular_expression = new RegExp("(" + query + ")", "gi");
+
+                html +=
+                  '<a href="#" class="list-group-item list-group-item-action" onclick="get_text(this)">' +
+                  responseData.response[count].replace(
+                    regular_expression,
+                    '<span class="text-primary fw-bold">$1</span>'
+                  ) +
+                  "</a>";
+              }
+            } else {
+              html +=
+                '<a href="#" class="list-group-item list-group-item-action disabled">No Data Found</a>';
+            }
+
+            html += "</ul>";
+
+            document.getElementById("list").innerHTML = html;
+          });
+      };
+
+      var search_element = document.getElementById("autocomplete_search");
+
+      search_element.onkeyup = function () {
+        var query = search_element.value;
+
+        load_data(query);
+      };
+
+      search_element.onfocus = function () {
+        var query = search_element.value;
+
+        load_data(query);
+      };
+
+      function get_text(event) {
+        var country_name = event.textContent;
+
+        console.log(country_name);
+
+        document.getElementById("autocomplete_search").value = country_name;
+
+        document.getElementById("list").innerHTML = "";
+      }
+    </script>
+  </body>
+</html>

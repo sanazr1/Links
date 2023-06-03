@@ -1,0 +1,24 @@
+<%- include('partials/header'); -%>
+
+<header>
+  <div class="smoothie">
+    <img src="/smoothie.png" alt="">
+  </div>
+  <div class="headings">
+    <h2>Smoothie Recipes</h2>
+    <h3>By link For links</h3>
+    <a href="https://www.linkslist.app/6F5uZUL" class="btn">View links</a>
+  
+    <% if(user) { %>
+    <a href="/signout" class="btn">Sign out</a>
+    <h1><%= user.email %></h1> 
+   <% } %>
+   <% if(!user) { %>
+    <a href="/signup" class="btn">Sign up</a>
+    <a href="/signin" class="btn">Sign in</a>
+   <% } %>
+  </div>
+</header>
+
+
+<%- include('partials/footer'); -%>
