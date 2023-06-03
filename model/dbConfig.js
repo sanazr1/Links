@@ -1,3 +1,14 @@
+const { Pool } = require('pg');
+const itemsPool = new Pool({
+    connectionString:"AkTX3FTJ3KDofRoIqY79PmEzhhXid060 psql -h dpg-chtsjf67avj345dn6nb0-a.oregon-postgres.render.com -U accounts_r6fo_user accounts_r6fo",
+    ssl: {
+        rejectUnauthorized: false
+    }
+});
+module.exports = itemsPool;
+
+
+
 /*const { Client } = require("pg");
 const dotenv = require("dotenv");
 dotenv.config();
